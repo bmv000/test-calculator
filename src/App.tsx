@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 const App: React.FC = () => {
@@ -13,6 +13,40 @@ const App: React.FC = () => {
     deliveryDistance: 0,
     totalPrice: 0,
   });
+  /*Состояние для хранения данных о месте проведения
+  const [venueData, setVenueData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  // Получение данных о месте проведения 
+  useEffect(() => {
+    const fetchVenueData = async () => {
+      try {
+        const response = await fetch(
+          "https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/home-assignment-venue-helsinki/static"
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setVenueData(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVenueData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }*/
+
 
   // Функция для обработки отправки формы
   const onSubmit = (data: any) => {
@@ -93,6 +127,7 @@ const App: React.FC = () => {
           <div>
             <label>
               User longitude
+             
               <Controller
                 name="userLongitude"
                 control={control}
@@ -104,6 +139,7 @@ const App: React.FC = () => {
                   },
                 }}
                 render={({ field }) => <input type="number" {...field} />}
+                
               />
               {errors.userLongitude && <span>{errors.userLongitude.message}</span>}
             </label>
