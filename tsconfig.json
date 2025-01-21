@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                                // Версия JavaScript (например, ES6)
+    "module": "ESNext",                             // Модульная система (например, ESNext)
+    "jsx": "react",                                 // Тип JSX (react или react-jsx)
+    "strict": true,                                 // Включает строгий режим TypeScript
+    "moduleResolution": "node",                    // Способ разрешения модулей (node для React проектов)
+    "esModuleInterop": true,                       // Совместимость с ES модулями
+    "skipLibCheck": true,                          // Пропуск проверки типов библиотек
+    "forceConsistentCasingInFileNames": true,      // Учет регистра в именах файлов
+    "allowSyntheticDefaultImports": true,          // Разрешить импорты с `default` для CommonJS
+    "resolveJsonModule": true,                     // Импорты JSON-файлов
+    "baseUrl": "./",                               // Базовый путь для проекта
+    "paths": {                                     // Пути к модулям (если есть алиасы)
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"]
+    },
+    "outDir": "./dist",                            // Директория для собранных файлов
+    "rootDir": "./src",                            // Корневая директория для исходного кода
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]       // Поддерживаемые библиотеки
+  },
+  "include": [
+    "src/**/*"                                     // Указывает, что включить в компиляцию
+  ],
+  "exclude": [
+    "node_modules",                                // Исключает node_modules из компиляции
+    "dist"                                        // Исключает выходные файлы
+  ]
+}
