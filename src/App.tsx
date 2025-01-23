@@ -1,4 +1,186 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+
+const App: React.FC = () => {
+  // Инициализация useForm
+  const { control, handleSubmit, setValue, formState: { errors } } = useForm();
+
+  // Состояние для вывода результатов
+  const [outputs, setOutputs] = useState({
+    cartValue: 0,
+    smallOrderSurcharge: 0,
+    deliveryFee: 0,
+    deliveryDistance: 0,
+    totalPrice: 0,
+  });
+
+  // Функция для обработки отправки формы
+  const onSubmit = (data: any) => {
+    const cartInCents = data.cartValue ? Number(data.cartValue) * 100 : 0;
+    const deliveryDistance = 177; // Захардкожено для примера
+
+    const smallOrderSurcharge =
+      cartInCents < 1000 ? Math.max(500 - cartInCents, 0) : 0;
+
+    const deliveryFee = 190; // Захардкожено для примера
+
+    const totalPrice = cartInCents + smallOrderSurcharge + deliveryFee;
+
+    setOutputs({
+      cartValue: cartInCents,
+      smallOrderSurcharge,
+      deliveryFee,
+      deliveryDistance,
+      totalPrice,
+    });
+  };
+
+  // Функция для получения геолокации пользователя
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // Обновляем значения полей формы
+          setValue("userLatitude", latitude.toString());
+          setValue("userLongitude", longitude.toString());
+        },
+        (error) => {
+          console.error("Ошибка получения геолокации: ", error);
+        }
+      );
+    } else {
+      console.error("Геолокация не поддерживается этим браузером.");
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px", maxWidth: "400px", margin: "0 auto" }}>
+      <h1>Delivery Order Price Calculator</h1>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div>
+          <h3>Details</h3>
+          <div>
+            <label>
+              Venue slug
+             
+ <select>
+
+       <option value="home-assignment-venue-helsinki">home-assignment-venue-helsinki</option>
+
+       <option value="home-assignment-venue-tallin">home-assignment-venue-tallin</option>
+
+     </select>
+
+            </label>
+          </div>
+          <div>
+            <label>
+              Cart value (EUR)
+              <Controller
+                name="cartValue"
+                control={control}
+                rules={{
+                  required: "Cart value is required",
+                  pattern: {
+                    value: /^[0-9]+(\.[0-9]{1,2})?$/,
+                    message: "Invalid cart value",
+                  },
+                }}
+                render={({ field }) => <input type="number" {...field} />}
+              />
+              {errors.cartValue && <span>{errors.cartValue.message}</span>}
+            </label>
+          </div>
+          <div>
+            <label>
+              User latitude
+              <Controller
+                name="userLatitude"
+                control={control}
+                rules={{
+                  required: "Latitude is required",
+                  pattern: {
+                    value: /^-?([1-8]?\d(\.\d+)?|90(\.0+)?|[-+]?(1[0-7]\d(\.\d+)?|180(\.0+)?))$/,
+                    message: "Invalid latitude",
+                  },
+                }}
+                render={({ field }) => <input type="number" {...field} />}
+              />
+              {errors.userLatitude && <span>{errors.userLatitude.message}</span>}
+            </label>
+          </div>
+          <div>
+            <label>
+              User longitude
+              <Controller
+                name="userLongitude"
+                control={control}
+                rules={{
+                  required: "Longitude is required",
+                  pattern: {
+                    value: /^-?((([1-9]?[0-9])(\.\d+)?|1[0-7][0-9](\.\d+)?|180(\.0+)?))$/,
+                    message: "Invalid longitude",
+                  },
+                }}
+                render={({ field }) => <input type="number" {...field} />}
+              />
+              {errors.userLongitude && <span>{errors.userLongitude.message}</span>}
+            </label>
+          </div>
+          <div>
+            <button type="button" onClick={getLocation}>
+              Get Location
+            </button>
+          </div>
+          <div>
+            <button type="submit">Calculate delivery price</button>
+          </div>
+        </div>
+      </form>
+
+      <div>
+        <h3>Price breakdown</h3>
+        <p>
+          Cart Value:{" "}
+          <span>
+            {(outputs.cartValue / 100).toFixed(2)} EUR
+          </span>
+        </p>
+        <p>
+          Delivery fee:{" "}
+          <span>
+            {(outputs.deliveryFee / 100).toFixed(2)} EUR
+          </span>
+        </p>
+        <p>
+          Delivery distance:{" "}
+          <span>{outputs.deliveryDistance} m</span>
+        </p>
+        <p>
+          Small order surcharge:{" "}
+          <span>
+            {(outputs.smallOrderSurcharge / 100).toFixed(2)} EUR
+          </span>
+        </p>
+        <p>
+          Total price:{" "}
+          <span>
+            {(outputs.totalPrice / 100).toFixed(2)} EUR
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default App;
+
+
+
+
+/*import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 
 const App: React.FC = () => {
@@ -13,7 +195,19 @@ const App: React.FC = () => {
     deliveryDistance: 0,
     totalPrice: 0,
   });
-  /*Состояние для хранения данных о месте проведения
+  const {createProxyMiddleware}= require('http-proxy-middleware')
+  module.exports = function(app) {
+  app.use(
+    '/api',
+    createProxyMiddleware({
+      target: 'https://consumer-api.development.dev.woltapi.com',
+      changeOrigin: true,
+    })
+  );
+};
+
+
+//Состояние для хранения данных о месте проведения
   const [venueData, setVenueData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,14 +216,16 @@ const App: React.FC = () => {
     const fetchVenueData = async () => {
       try {
         const response = await fetch(
-          "https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/home-assignment-venue-helsinki/static"
+
+        "/api/v1/venues/home-assignment-venue-tallinn/static"
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
         setVenueData(data);
-      } catch (error) {
+      }
+      catch (error) {
         setError(error.message);
       } finally {
         setLoading(false);
@@ -45,7 +241,7 @@ const App: React.FC = () => {
 
   if (error) {
     return <div>Error: {error}</div>;
-  }*/
+  }
 
 
   // Функция для обработки отправки формы
@@ -187,7 +383,7 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default App;*/
 
 
 
