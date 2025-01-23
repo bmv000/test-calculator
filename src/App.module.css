@@ -1,0 +1,94 @@
+.pc__page {
+    padding: 15px 50px;
+      background-color: #d1f5f5;
+      margin-left: auto;
+    margin-right: auto;
+   max-width: 600px;
+  
+  
+}
+.pc__form{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;  
+}
+/*.pc__h1__span{
+  display: inline-block;
+  max-width: 450px;
+  height: 100px;
+  line-height: 50px;
+  text-align: center;
+  border-radius: 50px;
+   background-color: rgb(23, 197, 197); 
+  border: 2px; 
+}*/
+.pc__h1{
+  text-align: center;
+  margin-left: auto;
+    margin-right: auto;
+  font-size: 34px;
+  font-weight: 800;
+  color: rgb(23, 197, 197); 
+  
+}
+.pc__h3{
+  text-align: right;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgb(3, 97, 97); 
+}
+.pc__label{
+    display: flex;
+  flex-direction: column;
+
+   max-width: 400px;
+  font-size: 24px;
+  font-weight: 600;
+   color: rgb(8, 119, 110);  
+ 
+}
+.pc__p{
+  max-width: 400px;
+  font-size: 24px;
+  font-weight: 600;
+   color: rgb(33, 99, 93);  
+}
+.pc__span{
+   text-align: center;
+}
+.pc__input{
+      padding: 15px;
+  font-size: 24px;
+  border: none;
+  box-shadow: 1px 3px 22px -4px #98f8f0 inset;
+ 
+  border-radius: 20px;
+    color: rgb(9, 156, 144);
+}
+.pc__input:hover,
+.pc__input:focus {
+  border: none;
+   box-shadow: 0px 5px 5px rgba(0, 0, 0.5, 0.15),
+    0px 1px 1px rgba(0, 0, 0.5, 0.2), 1px 2px 5px rgba(0, 0, 0, 0.5);
+}
+.pc__button{
+   
+    width: 450px;
+  padding: 16px;
+  border: none;
+  font-size: 30px;
+  font-weight: 800;
+  background-color: rgb(23, 197, 197); 
+  color: rgb(248, 249, 250);
+  cursor: pointer;
+  border-radius: 50px;  
+  margin-bottom: 20px;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0.5, 0.15),
+    0px 1px 1px rgba(0, 0, 0.5, 0.2), 1px 2px 5px rgba(0, 0, 0, 0.5);
+}
+.pc__button:hover,
+.pc__button:focus {
+  background-color: #fafafd;
+   color: rgb(14, 202, 202);
+    border: none;
+}

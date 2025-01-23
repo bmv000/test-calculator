@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "target": "ES6",                                // Версия JavaScript (например, ES6)
     "module": "ESNext",                             // Модульная система (например, ESNext)
     "jsx": "react",                                 // Тип JSX (react или react-jsx)

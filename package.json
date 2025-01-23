@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://bmv000.github.io/test-calculator/",
   "dependencies": {
+    "axios": "^1.7.9",
     "cra-template-typescript": "1.2.0",
     "http-proxy-middleware": "^3.0.3",
     "react": "^18.2.0",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@types/react": "^19.0.7",
-    "@types/react-dom": "^19.0.3"
+    "@types/react-dom": "^19.0.3",
+    "typescript-plugin-css-modules": "^5.1.0"
   }
 }
