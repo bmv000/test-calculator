@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
-import styles from '../../App.module.css';
+import styles from './GetLocation.module.css';
 
 const GetLocation = () => {
    const { control, setValue, formState: { errors } } = useForm();
@@ -24,7 +24,7 @@ const GetLocation = () => {
     }
   };
   return (
-    <div className={styles.pc__form}>
+    <div>
       <div>
         <label className={styles.pc__label}>
           User latitude
