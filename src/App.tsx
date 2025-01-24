@@ -84,7 +84,7 @@ const [totalPrice, setTotalPrice] = useState<number | null>(null);
 
 
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import GetLocation from "./components/GetLocation/GetLocation";
 import styles from './App.module.css';
@@ -92,7 +92,10 @@ import styles from './App.module.css';
 const App: React.FC = () => {
   // Инициализация useForm
   const { control, handleSubmit, setValue, formState: { errors } } = useForm();
-
+//Состояние для хранения данных о месте проведения
+  const [venueData, setVenueData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   // Состояние для вывода результатов
   const [outputs, setOutputs] = useState({
     cartValue: 0,
@@ -101,6 +104,28 @@ const App: React.FC = () => {
     deliveryDistance: 0,
     totalPrice: 0,
   });
+  useEffect(() => {
+    const fetchVenueData = async () => {
+      try {
+        const response = await fetch(
+
+        "/api/v1/venues/home-assignment-venue-tallinn/static"
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setVenueData(data);
+      }
+      catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVenueData();
+  }, []);
 /*// Функция для получения расстояния
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Радиус Земли в км
