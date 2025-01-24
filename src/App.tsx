@@ -1,48 +1,5 @@
-/*import React, { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import axios from 'axios';
-
-interface FormData {
-  cartValue: number;
-  userLatitude: number;
-  userLongitude: number;
-  venueSlug: string;
-}
-
-const App: React.FC = () => {
-  // Инициализация useForm
-  const { control, handleSubmit, setValue, formState: { errors } } = useForm();
-const [totalPrice, setTotalPrice] = useState<number | null>(null);
- 
-  // Состояние для вывода результатов
-  const [outputs, setOutputs] = useState({
-    cartValue: 0,
-    smallOrderSurcharge: 0,
-    deliveryFee: 0,
-    deliveryDistance: 0,
-    totalPrice: 0,
-  });
- // Состояние для загрузки и ошибок
-  const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-
-  // Состояние для данных о месте
-  const [venueData, setVenueData] = useState<any>(null);
-   /* useEffect(() => {
-    const venueSlug = "home-assignment-venue-helsinki";
-    const fetchVenueData = async () => {
-      try {
-        const staticResponse = await fetch(`https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/${venueSlug}/static`);
-        const staticData = await staticResponse.json();
-        const dynamicResponse = await fetch(`https://consumer-api.development.dev.woltapi.com/home-assignment-api/v1/venues/${venueSlug}/dynamic`);
-        const dynamicData = await dynamicResponse.json();
-        setVenueData({ static: staticData, dynamic: dynamicData });
-      } catch (error) {
-        console.error("Ошибка при получении данных о месте:", error);
-      }
-    };
-    fetchVenueData();
-  }, []);
+/*
+  
 
   // Функция для обработки отправки формы
   const onSubmit = async (data: FormData) => {
@@ -86,7 +43,6 @@ const [totalPrice, setTotalPrice] = useState<number | null>(null);
 
 import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import GetLocation from "./components/GetLocation/GetLocation";
 import styles from './App.module.css';
 
 const App: React.FC = () => {
@@ -109,15 +65,17 @@ const App: React.FC = () => {
       try {
         const response = await fetch(
 
-        "/api/v1/venues/home-assignment-venue-tallinn/static"
+        "/api/home-assignment-api/v1/venues/home-assignment-venue-tallinn/static"
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log({data})
         setVenueData(data);
       }
       catch (error) {
+         console.log({error})
         setError(error.message);
       } finally {
         setLoading(false);
@@ -126,6 +84,25 @@ const App: React.FC = () => {
 
     fetchVenueData();
   }, []);
+// Функция для получения геолокации пользователя
+  const getLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // Обновляем значения полей формы
+          setValue("userLatitude", latitude.toString());
+          setValue("userLongitude", longitude.toString());
+        },
+        (error) => {
+          console.error("Ошибка получения геолокации: ", error);
+        }
+      );
+    } else {
+      console.error("Геолокация не поддерживается этим браузером.");
+    }
+  };
+
 /*// Функция для получения расстояния
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Радиус Земли в км
@@ -177,9 +154,7 @@ const App: React.FC = () => {
              
  <select className={styles.pc__input}>
 
-       <option value="home-assignment-venue-helsinki">home-assignment-venue-helsinki</option>
-
-       <option value="home-assignment-venue-tallin">home-assignment-venue-tallin</option>
+       <option value="home-assignment-venue-tallin"> home-assignment-venue-tallin</option>
 
      </select>
 
@@ -203,13 +178,53 @@ const App: React.FC = () => {
               {errors.cartValue && <span>{errors.cartValue.message}</span>}
             </label>
           </div>
-          <div>
-           <GetLocation/>
-          <div>
+         <div>
+      
+        <label className={styles.pc__label}>
+          User latitude
+          <Controller
+            name="userLatitude"
+            control={control}
+            rules={{
+              required: "Latitude is required",
+              pattern: {
+                value: /^-?([1-8]?\d(\.\d+)?|90(\.0+)?|[-+]?(1[0-7]\d(\.\d+)?|180(\.0+)?))$/,
+                message: "Invalid latitude",
+              },
+            }}
+            render={({ field }) => <input type="number" {...field} className={styles.pc__input} />}
+          />
+          {errors.userLatitude && <span>{errors.userLatitude.message}</span>}
+        </label>
+      </div>
+      <div>
+        <label className={styles.pc__label}>
+          User longitude
+          <Controller 
+            name="userLongitude"
+            control={control}
+            rules={{
+              required: "Longitude is required",
+              pattern: {
+                value: /^-?((([1-9]?[0-9])(\.\d+)?|1[0-7][0-9](\.\d+)?|180(\.0+)?))$/,
+                message: "Invalid longitude",
+              },
+            }}
+            render={({ field }) => <input type="number" {...field}  className={styles.pc__input}/>}
+          />
+          {errors.userLongitude && <span>{errors.userLongitude.message}</span>}
+        </label>
+      </div>
+      <div>
+        <button type="button" onClick={getLocation} className={styles.pc__button}>
+          Get Location
+        </button>
+      
+    
             <button type="submit" className={styles.pc__button}>
               Calculate delivery price</button>
           </div>
-        </div>
+        
       </form>
 
       <div>
