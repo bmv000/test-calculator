@@ -49,7 +49,8 @@ const App: React.FC = () => {
   // Инициализация useForm
   const { control, handleSubmit, setValue, formState: { errors } } = useForm();
 //Состояние для хранения данных о месте проведения
-  const [venueData, setVenueData] = useState<any>(null);
+  const [venueData1, setVenueData1] = useState<any>(null);
+  const [venueData2, setVenueData2] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   // Состояние для вывода результатов
@@ -63,20 +64,35 @@ const App: React.FC = () => {
   useEffect(() => {
     const fetchVenueData = async () => {
       try {
-        const response = await fetch(
+        const response1 = await fetch(
 
-        "/api/home-assignment-api/v1/venues/home-assignment-venue-tallinn/static"
+          "/api/home-assignment-api/v1/venues/home-assignment-venue-tallinn/static"
+          
         );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response1.ok) {
+          throw new Error(`HTTP error! status: ${response1.status}`);
         }
-        const data = await response.json();
-        console.log({data})
-        setVenueData(data);
+        const data1 = await response1.json();
+        console.log({data1})
+        setVenueData1(data1);
+        //dynamic
+        const response2 = await fetch(
+
+          
+          "/api/home-assignment-api/v1/venues/home-assignment-venue-tallinn/dynamic"
+        );
+        if (!response2.ok) {
+          throw new Error(`HTTP error! status: ${response2.status}`);
+        }
+        const data2 = await response2.json();
+        console.log({data2})
+        setVenueData2(data2);
+
       }
       catch (error) {
          console.log({error})
-        setError(error.message);
+        // TODO: Fix
+        //setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -89,6 +105,7 @@ const App: React.FC = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log(position.coords)
           const { latitude, longitude } = position.coords;
           // Обновляем значения полей формы
           setValue("userLatitude", latitude.toString());
@@ -103,7 +120,7 @@ const App: React.FC = () => {
     }
   };
 
-/*// Функция для получения расстояния
+// Функция для получения расстояния
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Радиус Земли в км
     const dLat = toRad(lat2 - lat1);
@@ -112,23 +129,74 @@ const App: React.FC = () => {
               Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
               Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c * 1000; // Возвращаем расстояние в метрах
+    //return R * c * 1000; // Возвращаем расстояние в метрах
+    const distanceInMeters = R * c * 1000; // Расстояние в метрах
+  return Math.round(distanceInMeters); // Округляем до ближайшего целого
   };
 
   const toRad = (value: number): number => {
     return value * Math.PI / 180;
-  };  */
+  };  
+
+  
 
   // Функция для обработки отправки формы
   const onSubmit = (data: any) => {
-    const cartInCents = data.cartValue ? Number(data.cartValue) * 100 : 0;
-    const deliveryDistance = 177; // Захардкожено для примера
+    console.log(data);
+    
+    const tallinLon = venueData1.venue_raw.location.coordinates[0];
+    const tallinLat = venueData1.venue_raw.location.coordinates[1];
+    console.log(tallinLat);
+     console.log(tallinLon);
 
-    const smallOrderSurcharge =
-      cartInCents < 1000 ? Math.max(500 - cartInCents, 0) : 0;
+    let deliveryDistance: number = 0;
+    if (data.userLatitude && data.userLongitude && tallinLat && tallinLon) {
+      deliveryDistance = calculateDistance(tallinLat, tallinLon, Number(data.userLatitude), Number(data.userLongitude));
+      console.log(deliveryDistance); // 4423 метров
+    }
 
-    const deliveryFee = 190; // Захардкожено для примера
+    const cartInCents = data.cartValue ? Number(data.cartValue) * 100 : 0;    
 
+    const minlOrderSurcharge = venueData2.venue_raw.delivery_specs.order_minimum_no_surcharge;
+    console.log(minlOrderSurcharge); //1000 центов
+
+    const orderSurcharge = minlOrderSurcharge - cartInCents ;
+    const smallOrderSurcharge =  orderSurcharge < 0 ? 0 : orderSurcharge;
+  
+    /*cartInCents < 1000 ? Math.max(500 - cartInCents, 0) : 0;*/
+ 
+    const baseDeliveryFee = venueData2.venue_raw.delivery_specs.delivery_pricing.base_price; 
+    console.log(baseDeliveryFee); //190 
+  
+    
+    //Расчет доставки 
+    /*const calculateDeliveryCost = (cartValue, deliveryDistance, distanceRanges) => {
+      // Ищем соответствующий диапазон расстояний
+      const distanceRange = distanceRanges.find(range => {
+        return (
+          (range.min <= deliveryDistance && deliveryDistance < range.max) ||
+          (range.max === 0 && deliveryDistance >= range.min)
+        );
+      });
+
+      if (!distanceRange) {
+        return 0; // Если диапазон не найден, стоимость доставки равна 0
+      }
+
+      // Расчёт стоимости доставки
+      const deliveryFee = deliveryDistance + distanceRange.a + (distanceRange.b * deliveryDistance) / 10;
+    } 
+   
+      const distanceRange = venueData2.venue_raw.delivery_specs.delivery_pricing.distance_ranges
+        console.log(distanceRange);*/
+       
+    const deliveryFee = 10;
+            
+      console.log(deliveryFee);
+   
+        
+
+    
     const totalPrice = cartInCents + smallOrderSurcharge + deliveryFee;
 
     setOutputs({
@@ -471,9 +539,6 @@ const App: React.FC = () => {
 };
 
 export default App;*/
-
-
-
 
 
 /*import React, { useState } from "react";
