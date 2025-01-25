@@ -4,14 +4,14 @@ import { useForm, Controller } from "react-hook-form";
 import styles from './App.module.css';
 
 const App: React.FC = () => {
-  // Инициализация useForm
+  // Initialization useForm
   const { control, handleSubmit, setValue, formState: { errors } } = useForm();
-//Состояние для хранения данных о месте проведения
+//location storage state
   const [venueData1, setVenueData1] = useState<any>(null);
   const [venueData2, setVenueData2] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  // Состояние для вывода результатов
+  // State for outputting results
   const [outputs, setOutputs] = useState({
     cartValue: 0,
     smallOrderSurcharge: 0,
@@ -31,7 +31,7 @@ const App: React.FC = () => {
           throw new Error(`HTTP error! status: ${response1.status}`);
         }
         const data1 = await response1.json();
-        console.log({data1})
+        console.log({ data1 })
         setVenueData1(data1);
         //dynamic
         const response2 = await fetch(
@@ -43,29 +43,30 @@ const App: React.FC = () => {
           throw new Error(`HTTP error! status: ${response2.status}`);
         }
         const data2 = await response2.json();
-        console.log({data2})
+        console.log({ data2 })
         setVenueData2(data2);
 
       }
       catch (error) {
-         console.log({error})
-        // TODO: Fix
-        //setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVenueData();
+        console.log({ error })
+        
+        
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchVenueData();
+    
   }, []);
-// Функция для получения геолокации пользователя
+  
+// Function to get user's geolocation
   const getLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           console.log(position.coords)
           const { latitude, longitude } = position.coords;
-          // Обновляем значения полей формы
+// Updating form field values
           setValue("userLatitude", latitude.toString());
           setValue("userLongitude", longitude.toString());
         },
@@ -78,9 +79,9 @@ const App: React.FC = () => {
     }
   };
 
-// Функция для получения расстояния
+// Function to get distance
   const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
-    const R = 6371; // Радиус Земли в км
+    const R = 6371; // Earth radius in km
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -88,15 +89,16 @@ const App: React.FC = () => {
               Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     
-    const distanceInMeters = R * c * 1000; // Расстояние в метрах
-  return Math.round(distanceInMeters); // Округляем до ближайшего целого
+    const distanceInMeters = R * c * 1000; // Distance in meters
+  return Math.round(distanceInMeters); //Round to the nearest whole number
+
   };
 
   const toRad = (value: number): number => {
     return value * Math.PI / 180;
   }; 
 
-  // TODO: rename
+  // Function for getting delivery price
   const getDeliveryParams = (distance: number, distanceRanges: DistanceRange[]): DistanceParam => {  
     for (let range of distanceRanges) {
         if (distance >= range.min && distance < range.max) {
@@ -108,13 +110,13 @@ const App: React.FC = () => {
   }
 
   const calculateDeliveryCost = (baseDeliveryFee: number, deliveryDistance: number, sum: number, additionalFee: number): any => {  
-    // Расчёт стоимости доставки
+    
     return baseDeliveryFee + sum + (additionalFee * deliveryDistance) / 10;
   }
 
   
 
-  // Функция для обработки отправки формы
+  // Function to handle form submission
   const onSubmit = (data: any) => {
     console.log(data);
     
@@ -126,13 +128,13 @@ const App: React.FC = () => {
     let deliveryDistance: number = 0;
     if (data.userLatitude && data.userLongitude && tallinLat && tallinLon) {
       deliveryDistance = calculateDistance(tallinLat, tallinLon, Number(data.userLatitude), Number(data.userLongitude));
-      console.log(deliveryDistance); // 4423 метров
+      console.log(deliveryDistance); // 4423 м
     }
 
     const cartInCents = data.cartValue ? Number(data.cartValue) * 100 : 0;    
 
     const minlOrderSurcharge = venueData2.venue_raw.delivery_specs.order_minimum_no_surcharge;
-    console.log(minlOrderSurcharge); //1000 центов
+    console.log(minlOrderSurcharge); //1000 cents
 
     const orderSurcharge = minlOrderSurcharge - cartInCents ;
     const smallOrderSurcharge =  orderSurcharge < 0 ? 0 : orderSurcharge;
@@ -142,9 +144,9 @@ const App: React.FC = () => {
     const baseDeliveryFee = venueData2.venue_raw.delivery_specs.delivery_pricing.base_price; 
     console.log(baseDeliveryFee); //190 
   
-    // TODO: change deliveryDistance
-    // deliveryDistance = 1400;
-    // TODO: TEST different params (min, max)
+    //if we want to check the shipping calculation
+     //deliveryDistance = 1000;  
+    
     const deliveryParam: DistanceParam = getDeliveryParams(deliveryDistance, venueData2.venue_raw.delivery_specs.delivery_pricing.distance_ranges);
 
     if (deliveryParam.additionalFee === null || deliveryParam.sum === null) {
@@ -293,7 +295,7 @@ export default App;
 
 
 
-// строгая типизация
+// strong typing
 interface DistanceRange {
   a: number;
   b: number;
