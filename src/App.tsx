@@ -144,13 +144,13 @@ const App: React.FC = () => {
     const baseDeliveryFee = venueData2.venue_raw.delivery_specs.delivery_pricing.base_price; 
     console.log(baseDeliveryFee); //190 
   
-    //if we want to check the shipping calculation
+    //if we want to check the delivery calculation
      //deliveryDistance = 1000;  
     
     const deliveryParam: DistanceParam = getDeliveryParams(deliveryDistance, venueData2.venue_raw.delivery_specs.delivery_pricing.distance_ranges);
 
     if (deliveryParam.additionalFee === null || deliveryParam.sum === null) {
-      alert('Delivery is not allowed');
+      alert('Sorry, delivery to you is not possible.');
 
       return;
     }
@@ -183,7 +183,7 @@ const App: React.FC = () => {
              
  <select className={styles.pc__input}>
 
-       <option value="home-assignment-venue-tallin"> home-assignment-venue-tallin</option>
+       <option value="home-assignment-venue-tallin"> Tallin </option>
 
      </select>
 
@@ -192,19 +192,21 @@ const App: React.FC = () => {
           <div>
             <label className={styles.pc__label}>
               Cart value (EUR)
-              <Controller
-                name="cartValue"
+            <Controller 
+              name="cartValue"
+              
                 control={control}
                 rules={{
                   required: "Cart value is required",
                   pattern: {
                     value: /^[0-9]+(\.[0-9]{1,2})?$/,
                     message: "Invalid cart value",
+                    
                   },
                 }}
-                render={({ field }) => <input type="number" {...field} className={styles.pc__input}/>}
+                render={({ field }) => <input data-raw-value="cartValue" type="number" {...field} className={styles.pc__input}/>}
               />
-              {errors.cartValue && <span>{errors.cartValue.message}</span>}
+              {errors.cartValue && <span className={styles.pc__required}>{errors.cartValue.message}</span>}
             </label>
           </div>
          <div>
@@ -221,9 +223,9 @@ const App: React.FC = () => {
                 message: "Invalid latitude",
               },
             }}
-            render={({ field }) => <input type="number" {...field} className={styles.pc__input} />}
+            render={({ field }) => <input data-raw-value="userLatitude" type="number" {...field} className={styles.pc__input} />}
           />
-          {errors.userLatitude && <span>{errors.userLatitude.message}</span>}
+          {errors.userLatitude && <span className={styles.pc__required}>{errors.userLatitude.message}</span>}
         </label>
       </div>
       <div>
@@ -239,9 +241,9 @@ const App: React.FC = () => {
                 message: "Invalid longitude",
               },
             }}
-            render={({ field }) => <input type="number" {...field}  className={styles.pc__input}/>}
+            render={({ field }) => <input data-raw-value="userLongitude" type="number" {...field}  className={styles.pc__input}/>}
           />
-          {errors.userLongitude && <span>{errors.userLongitude.message}</span>}
+          {errors.userLongitude && <span className={styles.pc__required}>{errors.userLongitude.message}</span>}
         </label>
       </div>
       <div>
@@ -256,44 +258,42 @@ const App: React.FC = () => {
         
       </form>
 
-      <div>
+      <ul>
         <h3 className={styles.pc__h3}>Price breakdown</h3>
-        <p className={styles.pc__p}>
+        <li className={styles.pc__li}>
           Cart Value:{" "}
           <span className={styles.pc__span}>
             {(outputs.cartValue / 100).toFixed(2)} EUR
           </span>
-        </p>
-        <p className={styles.pc__p}>
+        </li>
+        <li className={styles.pc__li}>
           Delivery fee:{" "}
           <span className={styles.pc__span}>
             {(outputs.deliveryFee / 100).toFixed(2)} EUR
           </span>
-        </p>
-        <p className={styles.pc__p}>
+        </li>
+        <li className={styles.pc__li}>
           Delivery distance:{" "}
           <span className={styles.pc__span}>{outputs.deliveryDistance} m</span>
-        </p>
-        <p className={styles.pc__p}>
+        </li>
+        <li className={styles.pc__li}>
           Small order surcharge:{" "}
           <span className={styles.pc__span}>
             {(outputs.smallOrderSurcharge / 100).toFixed(2)} EUR
           </span>
-        </p>
-        <p className={styles.pc__p}>
+        </li>
+        <li className={styles.pc__li}>
           Total price:{" "}
           <span className={styles.pc__span}>
             {(outputs.totalPrice / 100).toFixed(2)} EUR
           </span>
-        </p>
-      </div>
+        </li>
+      </ul>
     </div>
   );
 };
 
 export default App;
-
-
 
 // strong typing
 interface DistanceRange {

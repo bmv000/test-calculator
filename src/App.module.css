@@ -12,6 +12,9 @@
   flex-direction: column;
   gap: 20px;  
 }
+.pc__required{
+  color: rgb(243, 76, 35); 
+}
 /*.pc__h1__span{
   display: inline-block;
   max-width: 450px;
@@ -35,7 +38,7 @@
   text-align: right;
   font-size: 24px;
   font-weight: 700;
-  color: rgb(3, 97, 97); 
+  color: rgb(46, 182, 182); 
 }
 .pc__label{
     display: flex;
@@ -47,14 +50,19 @@
    color: rgb(8, 119, 110);  
  
 }
-.pc__p{
-  max-width: 400px;
+.pc__li{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 600px;
   font-size: 24px;
   font-weight: 600;
+  margin-bottom: 10px;
    color: rgb(33, 99, 93);  
 }
 .pc__span{
-   text-align: center;
+   text-align: right;
+   font-weight: 750;
 }
 .pc__input{
       padding: 15px;
@@ -67,7 +75,9 @@
 }
 .pc__input:hover,
 .pc__input:focus {
-  border: none;
+  outline: none;
+  
+  border: 1px solid rgb(111, 229, 233);
    box-shadow: 0px 5px 5px rgba(0, 0, 0.5, 0.15),
     0px 1px 1px rgba(0, 0, 0.5, 0.2), 1px 2px 5px rgba(0, 0, 0, 0.5);
 }
