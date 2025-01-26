@@ -1,46 +1,42 @@
-# Getting Started with Create React App
+How to install:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
+This project was bootstrapped with Create React App
 
 In the project directory, you can run:
+   `npm install`
+    `npm start`
 
-### `npm start`
+Runs the app in the development mode.
+Open [http://localhost:3000] to view it in the browser.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
+The page will reload if you make edits.
 You will also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+How to use:
+This web application is designed to calculate the total delivery cost of your order, including the cost of goods, any additional fees, and delivery charges. Please follow the steps below to use the calculator.
+1.	Select the Destination
+	- In the "Details order" section, locate the "Venue slug" field.
+	- From the dropdown list, select "Tallin".
+2.	Enter Cart Value
+	- In the "Cart value (EUR)" field, input the total cost of your goods in euros.
+    - Note that this field accepts numerical input, supporting decimal values up to two decimal places.
+3.	Input User Geolocation
+    - In the "User latitude" and "User longitude" fields, enter the latitude and longitude of your location.
+	If you're unsure of your coordinates, you can obtain them automatically by clicking the "Get Location" button.
+	Upon clicking this button, the application will request access to your geolocation.
+	After obtaining the data, the latitude and longitude fields will be automatically populated with the corresponding values.
+4.	Submit the Form
+	After entering all the required information, click the "Calculate delivery price" button to calculate the delivery cost.
+5.	View Results
+	After submitting the form, you will see a "Price breakdown" section displaying the following details:
+	- Cart Value: The cost of your goods.
+    - Delivery fee: The delivery charge.
+    - Delivery distance: The delivery distance in meters.
+    - Small order surcharge: Additional charge for small orders (if applicable).
+    - Total price: The total cost of the order, including all fees and delivery charges.
+Notes:
+•	All fields are required.
+•	If you do not provide geolocation, the application will not be able to calculate the exact delivery cost.
+•	Ensure that the entered data is accurate to obtain an accurate calculation.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

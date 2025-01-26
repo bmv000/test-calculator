@@ -145,7 +145,7 @@ const App: React.FC = () => {
     console.log(baseDeliveryFee); //190 
   
     //if we want to check the delivery calculation
-     //deliveryDistance = 1000;  
+     deliveryDistance = 1000;  
     
     const deliveryParam: DistanceParam = getDeliveryParams(deliveryDistance, venueData2.venue_raw.delivery_specs.delivery_pricing.distance_ranges);
 
@@ -176,12 +176,12 @@ const App: React.FC = () => {
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles.pc__form}>
         
-          <h3 className={styles.pc__h3}>Details</h3>
+          <h2 className={styles.pc__h2}>Details order</h2>
           <div>
             <label className={styles.pc__label}>
-              Venue slug
+              <span className={styles.pc__label__span}>Venue slug</span> 
              
- <select className={styles.pc__input}>
+ <select className={styles.pc__input} data-test-id="venueSlug">
 
        <option value="home-assignment-venue-tallin"> Tallin </option>
 
@@ -191,7 +191,7 @@ const App: React.FC = () => {
           </div>
           <div>
             <label className={styles.pc__label}>
-              Cart value (EUR)
+              <span className={styles.pc__label__span}>Cart value (EUR)</span>
             <Controller 
               name="cartValue"
               
@@ -204,15 +204,33 @@ const App: React.FC = () => {
                     
                   },
                 }}
-                render={({ field }) => <input data-raw-value="cartValue" type="number" {...field} className={styles.pc__input}/>}
-              />
-              {errors.cartValue && <span className={styles.pc__required}>{errors.cartValue.message}</span>}
-            </label>
+              render={({ field }) => {
+      const rawValue = field.value ? Math.round(parseFloat(field.value) * 100) : 0; // Преобразование в "сырое" значение
+
+      return (
+        <>
+          <input
+            data-raw-value={rawValue}
+            data-test-id="cartValue"
+            type="number"
+            step="0.01" 
+            {...field}
+            className={styles.pc__input}
+          />
+          <span data-raw-value={rawValue}>
+            {field.value ? (parseFloat(field.value).toFixed(2)) : '0.00'} EUR
+          </span>
+        </>
+      );
+    }}
+  />
+  {errors.cartValue && <span className={styles.pc__required}>{errors.cartValue.message}</span>}
+</label>
           </div>
          <div>
       
         <label className={styles.pc__label}>
-          User latitude
+          <span className={styles.pc__label__span}>User latitude</span> 
           <Controller
             name="userLatitude"
             control={control}
@@ -223,14 +241,14 @@ const App: React.FC = () => {
                 message: "Invalid latitude",
               },
             }}
-            render={({ field }) => <input data-raw-value="userLatitude" type="number" {...field} className={styles.pc__input} />}
+            render={({ field }) => <input  data-test-id="userLatitude" type="number" {...field} className={styles.pc__input} />}
           />
           {errors.userLatitude && <span className={styles.pc__required}>{errors.userLatitude.message}</span>}
         </label>
       </div>
       <div>
         <label className={styles.pc__label}>
-          User longitude
+           <span className={styles.pc__label__span}>User longitude</span>
           <Controller 
             name="userLongitude"
             control={control}
@@ -241,12 +259,12 @@ const App: React.FC = () => {
                 message: "Invalid longitude",
               },
             }}
-            render={({ field }) => <input data-raw-value="userLongitude" type="number" {...field}  className={styles.pc__input}/>}
+            render={({ field }) => <input data-raw-value="field.value" data-test-id="userLongitude" type="number" {...field}  className={styles.pc__input}/>}
           />
           {errors.userLongitude && <span className={styles.pc__required}>{errors.userLongitude.message}</span>}
         </label>
       </div>
-      <div>
+      <div className={styles.pc__button__div}>
         <button type="button" onClick={getLocation} className={styles.pc__button}>
           Get Location
         </button>
@@ -258,33 +276,38 @@ const App: React.FC = () => {
         
       </form>
 
-      <ul>
-        <h3 className={styles.pc__h3}>Price breakdown</h3>
+      <ul data-test-id="price-breakdown">
+        <h2 className={styles.pc__h2}>Price breakdown</h2>
         <li className={styles.pc__li}>
           Cart Value:{" "}
-          <span className={styles.pc__span}>
+          <span className={styles.pc__span}
+            data-raw-value={outputs.cartValue}>
             {(outputs.cartValue / 100).toFixed(2)} EUR
           </span>
         </li>
         <li className={styles.pc__li}>
           Delivery fee:{" "}
-          <span className={styles.pc__span}>
+          <span className={styles.pc__span}
+          data-raw-value={outputs.deliveryFee}>
             {(outputs.deliveryFee / 100).toFixed(2)} EUR
           </span>
         </li>
-        <li className={styles.pc__li}>
+        <li className={styles.pc__li}
+        data-raw-value={outputs.deliveryDistance}>
           Delivery distance:{" "}
           <span className={styles.pc__span}>{outputs.deliveryDistance} m</span>
         </li>
         <li className={styles.pc__li}>
           Small order surcharge:{" "}
-          <span className={styles.pc__span}>
+          <span className={styles.pc__span}
+          data-raw-value={outputs.smallOrderSurcharge}>
             {(outputs.smallOrderSurcharge / 100).toFixed(2)} EUR
           </span>
         </li>
-        <li className={styles.pc__li}>
+        <li className={styles.pc__li__total}>
           Total price:{" "}
-          <span className={styles.pc__span}>
+          <span className={styles.pc__span__total}
+          data-raw-value={outputs.totalPrice}>
             {(outputs.totalPrice / 100).toFixed(2)} EUR
           </span>
         </li>

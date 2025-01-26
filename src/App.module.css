@@ -1,5 +1,5 @@
 .pc__page {
-    padding: 15px 50px;
+    padding: 30px 50px;
       background-color: #d1f5f5;
       margin-left: auto;
     margin-right: auto;
@@ -10,21 +10,13 @@
 .pc__form{
   display: flex;
   flex-direction: column;
-  gap: 20px;  
+  
+  gap: 25px;  
 }
 .pc__required{
   color: rgb(243, 76, 35); 
 }
-/*.pc__h1__span{
-  display: inline-block;
-  max-width: 450px;
-  height: 100px;
-  line-height: 50px;
-  text-align: center;
-  border-radius: 50px;
-   background-color: rgb(23, 197, 197); 
-  border: 2px; 
-}*/
+
 .pc__h1{
   text-align: center;
   margin-left: auto;
@@ -34,7 +26,7 @@
   color: rgb(23, 197, 197); 
   
 }
-.pc__h3{
+.pc__h2{
   text-align: right;
   font-size: 24px;
   font-weight: 700;
@@ -44,11 +36,14 @@
     display: flex;
   flex-direction: column;
 
-   max-width: 400px;
+   max-width: 600px;
   font-size: 24px;
   font-weight: 600;
    color: rgb(8, 119, 110);  
  
+}
+.pc__label__span{
+  margin-left: 15px;
 }
 .pc__li{
   display: flex;
@@ -65,7 +60,9 @@
    font-weight: 750;
 }
 .pc__input{
-      padding: 15px;
+  max-width: 600px;
+  margin-top: 10px;
+      padding: 20px;
   font-size: 24px;
   border: none;
   box-shadow: 1px 3px 22px -4px #98f8f0 inset;
@@ -81,9 +78,20 @@
    box-shadow: 0px 5px 5px rgba(0, 0, 0.5, 0.15),
     0px 1px 1px rgba(0, 0, 0.5, 0.2), 1px 2px 5px rgba(0, 0, 0, 0.5);
 }
+.pc__button__div{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+ align-items: center;
+}
 .pc__button{
-   
-    width: 450px;
+
+  margin-left: auto;
+    margin-right: auto;
+ text-align: center;
+ align-items: center; 
+    min-width: 275px;
+    max-width: 600px;
   padding: 16px;
   border: none;
   font-size: 30px;
@@ -95,10 +103,24 @@
   margin-bottom: 20px;
   box-shadow: 0px 5px 5px rgba(0, 0, 0.5, 0.15),
     0px 1px 1px rgba(0, 0, 0.5, 0.2), 1px 2px 5px rgba(0, 0, 0, 0.5);
-}
+transition: background-color 0.3s
+  }
 .pc__button:hover,
 .pc__button:focus {
   background-color: #fafafd;
    color: rgb(14, 202, 202);
     border: none;
+}
+.pc__li__total{
+  display: flex;
+  justify-content: space-between;
+  font-size: 34px;
+  font-weight: 800;
+  color: rgb(8, 173, 173);  
+}
+
+.pc__span__total{
+  font-size: 34px;
+  font-weight: 800;
+  color: rgb(8, 173, 173);  
 }
