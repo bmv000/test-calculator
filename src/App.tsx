@@ -71,11 +71,11 @@ const App: React.FC = () => {
           setValue("userLongitude", longitude.toString());
         },
         (error) => {
-          console.error("Ошибка получения геолокации: ", error);
+          console.error("Error getting geolocation: ", error);
         }
       );
     } else {
-      console.error("Геолокация не поддерживается этим браузером.");
+      console.error("Geolocation is not supported by this browser.");
     }
   };
 
@@ -145,7 +145,7 @@ const App: React.FC = () => {
     console.log(baseDeliveryFee); //190 
   
     //if we want to check the delivery calculation
-     deliveryDistance = 1000;  
+     //deliveryDistance = 800;  
     
     const deliveryParam: DistanceParam = getDeliveryParams(deliveryDistance, venueData2.venue_raw.delivery_specs.delivery_pricing.distance_ranges);
 
@@ -205,7 +205,7 @@ const App: React.FC = () => {
                   },
                 }}
               render={({ field }) => {
-      const rawValue = field.value ? Math.round(parseFloat(field.value) * 100) : 0; // Преобразование в "сырое" значение
+      const rawValue = field.value ? Math.round(parseFloat(field.value) * 100) : 0; // Convert to "raw" value
 
       return (
        
@@ -217,8 +217,6 @@ const App: React.FC = () => {
             {...field}
             className={styles.pc__input}
           />
-          
-        
       );
     }}
   />
@@ -226,7 +224,6 @@ const App: React.FC = () => {
 </label>
           </div>
          <div>
-      
         <label className={styles.pc__label}>
           <span className={styles.pc__label__span}>User latitude</span> 
           <Controller
@@ -239,7 +236,7 @@ const App: React.FC = () => {
                 message: "Invalid latitude",
               },
             }}
-            render={({ field }) => <input  data-test-id="userLatitude" type="number" {...field} className={styles.pc__input} />}
+            render={({ field }) => <input data-raw-value={field.value} data-test-id="userLatitude" type="number" {...field} className={styles.pc__input} />}
           />
           {errors.userLatitude && <span className={styles.pc__required}>{errors.userLatitude.message}</span>}
         </label>
@@ -257,12 +254,12 @@ const App: React.FC = () => {
                 message: "Invalid longitude",
               },
             }}
-            render={({ field }) => <input data-raw-value="field.value" data-test-id="userLongitude" type="number" {...field}  className={styles.pc__input}/>}
+            render={({ field }) => <input data-raw-value={field.value} data-test-id="userLongitude" type="number" {...field}  className={styles.pc__input}/>}
           />
           {errors.userLongitude && <span className={styles.pc__required}>{errors.userLongitude.message}</span>}
         </label>
       </div>
-      <div className={styles.pc__button__div}>
+      <div className={styles.pc__button__div} data-test-id="button">
         <button type="button" onClick={getLocation} className={styles.pc__button}>
           Get Location
         </button>
