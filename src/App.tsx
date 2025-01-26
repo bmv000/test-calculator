@@ -208,7 +208,7 @@ const App: React.FC = () => {
       const rawValue = field.value ? Math.round(parseFloat(field.value) * 100) : 0; // Преобразование в "сырое" значение
 
       return (
-        <>
+       
           <input
             data-raw-value={rawValue}
             data-test-id="cartValue"
@@ -217,10 +217,8 @@ const App: React.FC = () => {
             {...field}
             className={styles.pc__input}
           />
-          <span data-raw-value={rawValue}>
-            {field.value ? (parseFloat(field.value).toFixed(2)) : '0.00'} EUR
-          </span>
-        </>
+          
+        
       );
     }}
   />
